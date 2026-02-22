@@ -20,13 +20,25 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  role      Role     @default(RESPONSAVEL) // Papel padrão
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String?
+  role        Role         @default(RESPONSAVEL) // Papel padrão
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  loginAudits LoginAudit[]
 
-  @@map("users") // Nome da tabela no banco de dados será 'users'
+  @@map("users")
 }
 
+model LoginAudit {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  ipAddress String
+  status    String //"SUCCESS" ou "FAILURE"
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("login_audit")
+}
