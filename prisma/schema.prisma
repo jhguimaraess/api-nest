@@ -6,8 +6,8 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
-}
+  output   = "../src/generated"
+  }
 
 datasource db {
   provider = "postgresql"
@@ -22,23 +22,11 @@ enum Role {
 model User {
   id          String       @id @default(uuid())
   email       String       @unique
-  name        String?
-  role        Role         @default(RESPONSAVEL) // Papel padrão
+  name        String
+  password    String
+  role        Role         @default(RESPONSAVEL)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  loginAudits LoginAudit[]
 
   @@map("users")
-}
-
-model LoginAudit {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  ipAddress String
-  status    String //"SUCCESS" ou "FAILURE"
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@map("login_audit")
 }
